@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class PlayerScript : MonoBehaviour
 
     //body Player
     Rigidbody2D body;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,13 +26,28 @@ public class PlayerScript : MonoBehaviour
     void Update()
     {
         //bepaald welke kant player beweegd op basis van moveinput var
-        Vector2 playerVelocity = new Vector2(moveInput.x * moveInput.y, body.velocity.y);
+        Vector2 playerVelocity = new Vector2(moveInput.x * runSpeed, body.velocity.y);
+        body.velocity = playerVelocity;
+
+        //controleerd of player beweegd
+        bool playerMoves = Mathf.Abs(playerVelocity.x) > Mathf.Epsilon;
+        if (playerMoves)
+        {
+            //draait speler op basis hoe speler beweegd
+            transform.localScale = new Vector2(Mathf.Sign(body.velocity.x), transform.localScale.y);
+        }
+
+        //reset hele scene
+        if (Input.GetKey("escape"))
+        {
+            SceneManager.LoadScene("LevelOne");
+        }
     }
 
     void OnMove(InputValue value)
     {
-    //var moveInput zegt of er op L of R wordt geklikt
-    moveInput = value.Get<Vector2>();
+        //var moveInput zegt of er op L of R wordt geklikt
+        moveInput = value.Get<Vector2>();
     }
 }
 
