@@ -357,7 +357,7 @@ GameObject:
   - component: {fileID: 562142232}
   - component: {fileID: 562142231}
   - component: {fileID: 562142235}
-  - component: {fileID: 562142234}
+  - component: {fileID: 562142236}
   m_Layer: 6
   m_Name: body
   m_TagString: Untagged
@@ -460,18 +460,6 @@ Transform:
   - {fileID: 1950827537}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &562142234
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 562142230}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70c2f7973026791428f455b7a1e0d4c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!70 &562142235
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -507,6 +495,19 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 0.9999999, y: 2}
   m_Direction: 0
+--- !u!114 &562142236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 562142230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70c2f7973026791428f455b7a1e0d4c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runSpeed: 5
 --- !u!1 &1854764611
 GameObject:
   m_ObjectHideFlags: 0
