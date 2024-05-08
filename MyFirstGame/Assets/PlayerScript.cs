@@ -12,6 +12,7 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
     private float jumpingPower = 8f;
+    private Vector2 startLocation = Vector3.zero;
 
     //Vector 2 voor x en y input (vector3 is xyz)
     Vector2 moveInput;
@@ -25,6 +26,7 @@ public class PlayerScript : MonoBehaviour
     void Start()
     {
         body = GetComponent<Rigidbody2D>();
+        startLocation = body.position;
     }
 
     // Update is called once per frame
@@ -94,6 +96,15 @@ public class PlayerScript : MonoBehaviour
         }
     }
     #endregion
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {   //als andere collider de tag enemy heeft word enemyhit true
+        if(gameObject.tag == "Save1")
+        {
+            //waar player daadwerkelijk begint als spel begint
+            startLocation = GameObject.FindGameObjectWithTag("Save1").transform.position;
+        }
+    }
 }
 
 
