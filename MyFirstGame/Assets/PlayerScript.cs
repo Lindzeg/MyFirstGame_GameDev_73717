@@ -73,10 +73,10 @@ public class PlayerScript : MonoBehaviour
 
     public bool IsGrounded()
     {
-        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+        return Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer);
     }
 
-    #region detectCollision
+    #region detectenemyCollision
     private void OnCollisionEnter2D(Collision2D collision)
     {
         //als de andere collision de tag enemy heeft wordt enemy hit true
