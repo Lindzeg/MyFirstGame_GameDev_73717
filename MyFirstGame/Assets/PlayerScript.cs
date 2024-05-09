@@ -21,6 +21,7 @@ public class PlayerScript : MonoBehaviour
     Rigidbody2D body;
     //used in method oncollision
     bool enemyHit = false;
+    bool hasReachedSavePoint = false; //to track if savepoint is reached
 
     // Start is called before the first frame update
     void Start()
@@ -63,6 +64,15 @@ public class PlayerScript : MonoBehaviour
         if(enemyHit) 
         {
             Debug.Log("Geraakt");
+
+            if(hasReachedSavePoint)
+            {
+                RespawnAtSavePoint();
+            }
+            else
+            {
+                RespawnAtStart();
+            }
         }
         
     }
@@ -75,7 +85,7 @@ public class PlayerScript : MonoBehaviour
 
     public bool IsGrounded()
     {
-        return Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer);
+        return Physics2D.OverlapCircle(groundCheck.position, 0.6f, groundLayer);
     }
 
     #region detectenemyCollision
@@ -97,13 +107,29 @@ public class PlayerScript : MonoBehaviour
     }
     #endregion
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D other)
     {   //als andere collider de tag enemy heeft word enemyhit true
-        if(gameObject.tag == "Save1")
+        if(other.gameObject.tag == "Save1")
         {
+            hasReachedSavePoint = true;
             //waar player daadwerkelijk begint als spel begint
             startLocation = GameObject.FindGameObjectWithTag("Save1").transform.position;
+            Debug.Log("Save");
+            Debug.Log("startLocation set to: " + startLocation); //startLocation controleren
         }
+    }
+
+    void RespawnAtSavePoint()
+    {
+        body.position = startLocation; //teleport to savepoint
+        enemyHit = false; //reset enemyhit status
+    }
+
+    void RespawnAtStart()
+    {
+        body.position = startLocation;
+        enemyHit = false;
+        hasReachedSavePoint= false;
     }
 }
 

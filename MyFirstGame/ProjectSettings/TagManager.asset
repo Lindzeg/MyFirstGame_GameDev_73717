@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - Save1
+  - StartLocation1
   layers:
   - Default
   - TransparentFX
