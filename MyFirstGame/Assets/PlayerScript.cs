@@ -11,6 +11,7 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private float runSpeed = 5f;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private Animator animator;
     private float jumpingPower = 8f;
     private Vector2 startLocation = Vector3.zero;
 
@@ -48,7 +49,12 @@ public class PlayerScript : MonoBehaviour
         if (moveInput.y > 0 && IsGrounded())
         {
             playerVelocity = new Vector2(moveInput.x, jumpingPower);
+            animator.SetBool("Jump", true);
 
+        }
+        else
+        {
+            animator.SetBool("Jump", false);
         }
 
         body.velocity = playerVelocity;     
@@ -57,8 +63,13 @@ public class PlayerScript : MonoBehaviour
         bool playerMoves = Mathf.Abs(playerVelocity.x) > Mathf.Epsilon;
         if (playerMoves)
         {
+            animator.SetBool("Run", true);
             //draait speler op basis hoe speler beweegd
             transform.localScale = new Vector2(Mathf.Sign(body.velocity.x), transform.localScale.y);
+        }
+        else
+        {
+            animator.SetBool("Run", false);
         }
         #endregion
 
@@ -122,8 +133,8 @@ public class PlayerScript : MonoBehaviour
         if (other.gameObject.tag == "FinishLocationLvl1")
         {
             Debug.Log("Finish");
-   
-            SceneManager.LoadScene("Level2");   
+            SceneManager.LoadScene("Level2");
+            SceneManager.UnloadScene("Level1");
                       
         }
     }
