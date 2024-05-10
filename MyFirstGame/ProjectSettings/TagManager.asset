@@ -7,6 +7,9 @@ TagManager:
   - Enemy
   - Save1
   - StartLocation1
+  - FinishLocationLvl1
+  - Save2
+  - FinishLocationLvl2
   layers:
   - Default
   - TransparentFX

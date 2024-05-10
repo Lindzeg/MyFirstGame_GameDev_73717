@@ -23,6 +23,7 @@ public class PlayerScript : MonoBehaviour
     bool enemyHit = false;
     bool hasReachedSavePoint = false; //to track if savepoint is reached
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -91,6 +92,7 @@ public class PlayerScript : MonoBehaviour
     #region detectenemyCollision
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        
         //als de andere collision de tag enemy heeft wordt enemy hit true
         if (collision.gameObject.tag == "Enemy")
         {
@@ -99,7 +101,7 @@ public class PlayerScript : MonoBehaviour
     }
 
     private void OnCollisionExit2D(Collision2D collision)
-    {
+    {      
         if (collision.gameObject.tag == "Enemy")
         {
             enemyHit = false;
@@ -107,7 +109,7 @@ public class PlayerScript : MonoBehaviour
     }
     #endregion
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other) //save1
     {   //als andere collider de tag enemy heeft word enemyhit true
         if(other.gameObject.tag == "Save1")
         {
@@ -116,6 +118,13 @@ public class PlayerScript : MonoBehaviour
             startLocation = GameObject.FindGameObjectWithTag("Save1").transform.position;
             Debug.Log("Save");
             Debug.Log("startLocation set to: " + startLocation); //startLocation controleren
+        }
+        if (other.gameObject.tag == "FinishLocationLvl1")
+        {
+            Debug.Log("Finish");
+   
+            SceneManager.LoadScene("Level2");   
+                      
         }
     }
 
@@ -126,7 +135,7 @@ public class PlayerScript : MonoBehaviour
     }
 
     void RespawnAtStart()
-    {
+    { 
         body.position = startLocation;
         enemyHit = false;
         hasReachedSavePoint= false;
