@@ -132,9 +132,9 @@ public class PlayerScript : MonoBehaviour
         }
         if (other.gameObject.tag == "FinishLocationLvl1")
         {
-            Debug.Log("Finish");
-            SceneManager.LoadScene("Level2");
-            SceneManager.UnloadScene("Level1");
+            //Debug.Log("Finish");
+            //SceneManager.LoadScene("Level2");
+            //SceneManager.UnloadScene("Level1");
                       
         }
     }
