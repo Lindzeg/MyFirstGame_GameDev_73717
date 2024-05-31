@@ -121,7 +121,7 @@ public class PlayerScript : MonoBehaviour
     #endregion
 
     private void OnTriggerEnter2D(Collider2D other) //save1
-    {   //als andere collider de tag enemy heeft word enemyhit true
+    {   //als andere collider de tag save1 heeft word save1 true
         if(other.gameObject.tag == "Save1")
         {
             hasReachedSavePoint = true;
@@ -132,8 +132,8 @@ public class PlayerScript : MonoBehaviour
         }
         if (other.gameObject.tag == "FinishLocationLvl1")
         {
-            //Debug.Log("Finish");
-            //SceneManager.LoadScene("Level2");
+            Debug.Log("Finish");
+            SceneManager.LoadScene("Level2");
             //SceneManager.UnloadScene("Level1");
                       
         }
