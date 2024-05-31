@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Enemy
+  - Save1
+  - StartLocation1
+  - FinishLocationLvl1
+  - Save2
+  - FinishLocationLvl2
   layers:
   - Default
   - TransparentFX
@@ -11,10 +17,10 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Level
+  - Foreground
+  - Background
   - 
   - 
   - 
