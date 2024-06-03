@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -24,12 +27,27 @@ public class PlayerScript : MonoBehaviour
     bool enemyHit = false;
     bool hasReachedSavePoint = false; //to track if savepoint is reached
 
+    //audio
+    private AudioSource audioSource;
+    private AudioClip jumpClip;
+    private AudioClip backGroundClip;
+
 
     // Start is called before the first frame update
     void Start()
     {
         body = GetComponent<Rigidbody2D>();
         startLocation = body.position;
+        //add audio component to gameobject
+        audioSource = gameObject.AddComponent<AudioSource>();
+        //load auio from resource folder
+        jumpClip = Resources.Load<AudioClip>("jump");
+        backGroundClip = Resources.Load<AudioClip>("background");
+        //configure audiosource to play music on loop
+        audioSource.clip = backGroundClip;
+        audioSource.loop = true;
+        audioSource.playOnAwake = true;
+        audioSource.Play();
     }
 
     // Update is called once per frame
@@ -50,7 +68,7 @@ public class PlayerScript : MonoBehaviour
         {
             playerVelocity = new Vector2(moveInput.x, jumpingPower);
             animator.SetBool("Jump", true);
-
+            audioSource.PlayOneShot(jumpClip); //play sound when jumping
         }
         else
         {
@@ -120,22 +138,24 @@ public class PlayerScript : MonoBehaviour
     }
     #endregion
 
-    private void OnTriggerEnter2D(Collider2D other) //save1
-    {   //als andere collider de tag save1 heeft word save1 true
+    private void OnTriggerEnter2D(Collider2D other) 
+    {   //als collider met tag save1 heeft = save true
         if(other.gameObject.tag == "Save1")
         {
             hasReachedSavePoint = true;
             //waar player daadwerkelijk begint als spel begint
             startLocation = GameObject.FindGameObjectWithTag("Save1").transform.position;
             Debug.Log("Save");
-            Debug.Log("startLocation set to: " + startLocation); //startLocation controleren
         }
         if (other.gameObject.tag == "FinishLocationLvl1")
         {
             Debug.Log("Finish");
-            SceneManager.LoadScene("Level2");
-            //SceneManager.UnloadScene("Level1");
-                      
+            SceneManager.LoadScene("Level2");              
+        }
+        if (other.gameObject.tag == "FinishLocationLvl2")
+        {
+            Debug.Log("Finish");
+            SceneManager.LoadScene("Level3");
         }
     }
 

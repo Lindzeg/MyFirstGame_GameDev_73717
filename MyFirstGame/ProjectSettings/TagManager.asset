@@ -10,6 +10,7 @@ TagManager:
   - FinishLocationLvl1
   - Save2
   - FinishLocationLvl2
+  - FinishLocationLvl3
   layers:
   - Default
   - TransparentFX
