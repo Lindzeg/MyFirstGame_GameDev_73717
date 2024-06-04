@@ -89,6 +89,11 @@ public class PlayerScript : MonoBehaviour
         {
             animator.SetBool("Run", false);
         }
+
+        //add slide movement
+        //add slide inputkeys
+        //add slide bool
+        //add slidespeed?
         #endregion
 
         if(enemyHit) 
