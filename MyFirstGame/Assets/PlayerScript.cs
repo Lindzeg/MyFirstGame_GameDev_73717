@@ -15,17 +15,32 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Animator animator;
-    private float jumpingPower = 8f;
+
+    //startlocatie van player
     private Vector2 startLocation = Vector3.zero;
 
+    //jumping height player
+    private float jumpingPower = 10f;
+    private float slideSpeed = 8f;
+    //duration of slide in seconds
+    private float slideDuration = 0.5f;
+    //timer to manage slide duration
+    private float slideTimer = 0f; 
+
+
     //Vector 2 voor x en y input (vector3 is xyz)
+    //makes player move on x and y axis 
     Vector2 moveInput;
 
-    //body Player
+    //set body Player
     Rigidbody2D body;
+
     //used in method oncollision
     bool enemyHit = false;
-    bool hasReachedSavePoint = false; //to track if savepoint is reached
+    //to track if savepoint is reached
+    bool hasReachedSavePoint = false;
+    //to track if player is sliding
+    bool isSliding = false;
 
     //audio
     private AudioSource audioSource;
@@ -61,6 +76,7 @@ public class PlayerScript : MonoBehaviour
 
         #region movementPlayer 
         //bepaald welke kant player beweegd op basis van moveinput var
+        // volicity is gelijk aan snelheid en de richting waar een object in beweegd
         Vector2 playerVelocity = new Vector2(moveInput.x * runSpeed, body.velocity.y);
 
         //als de speler op W klikt en de grond word geraakt, dan springt player
@@ -74,6 +90,32 @@ public class PlayerScript : MonoBehaviour
         {
             animator.SetBool("Jump", false);
         }
+
+        //als speler op s klikt. de grond word geraakt en nog niet slide
+        if (Input.GetKey(KeyCode.S) &&IsGrounded() && !isSliding)
+        {
+            isSliding = true;
+            slideTimer = slideDuration;
+            //
+            playerVelocity = new Vector2(Mathf.Sign(transform.localScale.x) * slideSpeed, playerVelocity.y);
+            //set paramater in unity to true
+            animator.SetBool("preslide", true);
+            animator.SetBool("slide", true); 
+        }
+
+        if(isSliding)
+        {
+            slideTimer -= Time.deltaTime;
+            if(slideTimer < 0) //when slide duration reaches 0, stop sliding
+            {
+                isSliding = false;
+                animator.SetBool("preslide", false);
+                animator.SetBool("slide", false); //set paramter unity to false
+            }
+        }
+        
+        //anders als speler 
+
 
         body.velocity = playerVelocity;     
 
@@ -90,10 +132,7 @@ public class PlayerScript : MonoBehaviour
             animator.SetBool("Run", false);
         }
 
-        //add slide movement
-        //add slide inputkeys
-        //add slide bool
-        //add slidespeed?
+    
         #endregion
 
         if(enemyHit) 
