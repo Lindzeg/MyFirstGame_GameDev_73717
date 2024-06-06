@@ -156,7 +156,7 @@ public class PlayerScript : MonoBehaviour
 
     public bool IsGrounded()
     {
-        return Physics2D.OverlapCircle(groundCheck.position, 0.6f, groundLayer);
+        return Physics2D.OverlapCircle(groundCheck.position, 0.3f, groundLayer);
     }
 
     #region detectenemyCollision
@@ -200,7 +200,7 @@ public class PlayerScript : MonoBehaviour
         }
         if(other.gameObject.tag == "FinishLocationLvl3")
         {
-            SceneManager.LoadScene("Level1");
+            SceneManager.LoadScene("endMenu");
         }
     }
 
