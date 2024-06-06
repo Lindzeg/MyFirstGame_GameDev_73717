@@ -1546,7 +1546,7 @@ GameObject:
   - component: {fileID: 1055335273}
   - component: {fileID: 1055335272}
   m_Layer: 0
-  m_Name: FinishLevel1
+  m_Name: FinishLevel3
   m_TagString: FinishLocationLvl3
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1806,7 +1806,7 @@ GameObject:
   - component: {fileID: 1108528003}
   - component: {fileID: 1108528002}
   m_Layer: 8
-  m_Name: Save1
+  m_Name: Save3
   m_TagString: Save1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

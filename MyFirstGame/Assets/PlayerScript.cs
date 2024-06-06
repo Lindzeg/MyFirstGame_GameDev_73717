@@ -21,9 +21,9 @@ public class PlayerScript : MonoBehaviour
 
     //jumping height player
     private float jumpingPower = 10f;
-    private float slideSpeed = 8f;
+    private float slideSpeed = 20f;
     //duration of slide in seconds
-    private float slideDuration = 0.5f;
+    private float slideDuration = 0.8f;
     //timer to manage slide duration
     private float slideTimer = 0f; 
 
@@ -53,11 +53,15 @@ public class PlayerScript : MonoBehaviour
     {
         body = GetComponent<Rigidbody2D>();
         startLocation = body.position;
+
+        //audio source background in start update for a constant sound when playing
         //add audio component to gameobject
         audioSource = gameObject.AddComponent<AudioSource>();
-        //load auio from resource folder
+
+        //load audio from resource folder
         jumpClip = Resources.Load<AudioClip>("jump");
         backGroundClip = Resources.Load<AudioClip>("background");
+
         //configure audiosource to play music on loop
         audioSource.clip = backGroundClip;
         audioSource.loop = true;
@@ -91,12 +95,12 @@ public class PlayerScript : MonoBehaviour
             animator.SetBool("Jump", false);
         }
 
-        //als speler op s klikt. de grond word geraakt en nog niet slide
-        if (Input.GetKey(KeyCode.S) &&IsGrounded() && !isSliding)
+        //als speler op S klikt, de grond word geraakt en nog niet slide:
+        if (Input.GetKey(KeyCode.S) && IsGrounded() && !isSliding)
         {
             isSliding = true;
-            slideTimer = slideDuration;
-            //
+            slideTimer = slideDuration; //set slidetimer to slideduration to enable counting slideduration
+            //slide logic 
             playerVelocity = new Vector2(Mathf.Sign(transform.localScale.x) * slideSpeed, playerVelocity.y);
             //set paramater in unity to true
             animator.SetBool("preslide", true);
@@ -105,17 +109,14 @@ public class PlayerScript : MonoBehaviour
 
         if(isSliding)
         {
-            slideTimer -= Time.deltaTime;
+            slideTimer -= Time.deltaTime; //delta time for decrementing slidetimer
             if(slideTimer < 0) //when slide duration reaches 0, stop sliding
             {
                 isSliding = false;
                 animator.SetBool("preslide", false);
-                animator.SetBool("slide", false); //set paramter unity to false
+                animator.SetBool("slide", false); //set parameter unity to false
             }
-        }
-        
-        //anders als speler 
-
+        } 
 
         body.velocity = playerVelocity;     
 
@@ -130,15 +131,11 @@ public class PlayerScript : MonoBehaviour
         else
         {
             animator.SetBool("Run", false);
-        }
-
-    
+        }  
         #endregion
 
         if(enemyHit) 
         {
-            Debug.Log("Geraakt");
-
             if(hasReachedSavePoint)
             {
                 RespawnAtSavePoint();
@@ -164,9 +161,8 @@ public class PlayerScript : MonoBehaviour
 
     #region detectenemyCollision
     private void OnCollisionEnter2D(Collision2D collision)
-    {
-        
-        //als de andere collision de tag enemy heeft wordt enemy hit true
+    { 
+        //als een andere collision de tag enemy heeft wordt enemy hit true
         if (collision.gameObject.tag == "Enemy")
         {
             enemyHit = true;
@@ -174,7 +170,8 @@ public class PlayerScript : MonoBehaviour
     }
 
     private void OnCollisionExit2D(Collision2D collision)
-    {      
+    {    
+        //als gameobject enemy niet raakt wordt enemyHit false
         if (collision.gameObject.tag == "Enemy")
         {
             enemyHit = false;
@@ -189,17 +186,21 @@ public class PlayerScript : MonoBehaviour
             hasReachedSavePoint = true;
             //waar player daadwerkelijk begint als spel begint
             startLocation = GameObject.FindGameObjectWithTag("Save1").transform.position;
-            Debug.Log("Save");
+            
         }
         if (other.gameObject.tag == "FinishLocationLvl1")
         {
-            Debug.Log("Finish");
+            
             SceneManager.LoadScene("Level2");              
         }
         if (other.gameObject.tag == "FinishLocationLvl2")
         {
-            Debug.Log("Finish");
+            
             SceneManager.LoadScene("Level3");
+        }
+        if(other.gameObject.tag == "FinishLocationLvl3")
+        {
+            SceneManager.LoadScene("Level1");
         }
     }
 
