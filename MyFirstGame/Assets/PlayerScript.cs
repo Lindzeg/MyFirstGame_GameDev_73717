@@ -9,9 +9,18 @@ using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 public class PlayerScript : MonoBehaviour
 {
+    #region notes
+    //Instaid of hardcoding ifstatements, make a method to perform an action or return multiple values.
+    //volicity is gelijk aan snelheid en de richting waar een object in beweegd
+    //void: does not return a value, can be defined independent of the class
+    //private void: does not return a value, can only be used in the same class
+    //public void: does not return a value, can be used outside the class
+    #endregion
+
+    #region fields
     //serialize zodat je de waarde in unity kan veranderen
     //kan niet door scripts worden aangespast
-    [SerializeField] private float runSpeed = 5f;
+    [SerializeField] private float runSpeed = 10f;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Animator animator;
@@ -25,11 +34,13 @@ public class PlayerScript : MonoBehaviour
     //duration of slide in seconds
     private float slideDuration = 0.8f;
     //timer to manage slide duration
-    private float slideTimer = 0f; 
+    private float slideTimer = 0f;
 
 
     //Vector 2 voor x en y input (vector3 is xyz)
     //makes player move on x and y axis 
+    //Method OnMove haald/update de waardes van Vector2 op 
+    //De waardes van OnMove worden in field moveInput opgeslagen
     Vector2 moveInput;
 
     //set body Player
@@ -46,7 +57,7 @@ public class PlayerScript : MonoBehaviour
     private AudioSource audioSource;
     private AudioClip jumpClip;
     private AudioClip backGroundClip;
-
+    #endregion
 
     // Start is called before the first frame update
     void Start()
@@ -79,9 +90,10 @@ public class PlayerScript : MonoBehaviour
         }
 
         #region movementPlayer 
-        //bepaald welke kant player beweegd op basis van moveinput var
-        // volicity is gelijk aan snelheid en de richting waar een object in beweegd
+
+        //bepaald welke kant player beweegd op basis van moveinput 
         Vector2 playerVelocity = new Vector2(moveInput.x * runSpeed, body.velocity.y);
+
 
         //als de speler op W klikt en de grond word geraakt, dan springt player
         if (moveInput.y > 0 && IsGrounded())
@@ -104,22 +116,20 @@ public class PlayerScript : MonoBehaviour
             playerVelocity = new Vector2(Mathf.Sign(transform.localScale.x) * slideSpeed, playerVelocity.y);
             //set paramater in unity to true
             animator.SetBool("preslide", true);
-            animator.SetBool("slide", true); 
+            animator.SetBool("slide", true);
         }
-
-        if(isSliding)
+        if (isSliding)
         {
             slideTimer -= Time.deltaTime; //delta time for decrementing slidetimer
-            if(slideTimer < 0) //when slide duration reaches 0, stop sliding
+            if (slideTimer < 0) //when slide duration reaches 0, stop sliding
             {
                 isSliding = false;
                 animator.SetBool("preslide", false);
                 animator.SetBool("slide", false); //set parameter unity to false
             }
-        } 
+        }
 
-        body.velocity = playerVelocity;     
-
+        body.velocity = playerVelocity;
         //controleerd of player beweegd
         bool playerMoves = Mathf.Abs(playerVelocity.x) > Mathf.Epsilon;
         if (playerMoves)
@@ -131,12 +141,13 @@ public class PlayerScript : MonoBehaviour
         else
         {
             animator.SetBool("Run", false);
-        }  
+        }
         #endregion
 
-        if(enemyHit) 
+        //wanneer speler vijand raakt, update nieuwe begin positie wanneer savepoint is bereikt. 
+        if (enemyHit)
         {
-            if(hasReachedSavePoint)
+            if (hasReachedSavePoint)
             {
                 RespawnAtSavePoint();
             }
@@ -145,12 +156,12 @@ public class PlayerScript : MonoBehaviour
                 RespawnAtStart();
             }
         }
-        
+
     }
 
     void OnMove(InputValue value)
     {
-        //var moveInput zegt of er op L of R wordt geklikt
+        //Hier worden de waardes van Vector2 opgehaald/geupdate. 
         moveInput = value.Get<Vector2>();
     }
 
@@ -161,8 +172,8 @@ public class PlayerScript : MonoBehaviour
 
     #region detectenemyCollision
     private void OnCollisionEnter2D(Collision2D collision)
-    { 
-        //als een andere collision de tag enemy heeft wordt enemy hit true
+    {
+        //als een collision de tag enemy heeft wordt enemy hit true
         if (collision.gameObject.tag == "Enemy")
         {
             enemyHit = true;
@@ -170,7 +181,7 @@ public class PlayerScript : MonoBehaviour
     }
 
     private void OnCollisionExit2D(Collision2D collision)
-    {    
+    {
         //als gameobject enemy niet raakt wordt enemyHit false
         if (collision.gameObject.tag == "Enemy")
         {
@@ -179,26 +190,25 @@ public class PlayerScript : MonoBehaviour
     }
     #endregion
 
-    private void OnTriggerEnter2D(Collider2D other) 
+    private void OnTriggerEnter2D(Collider2D other)
     {   //als collider met tag save1 heeft = save true
-        if(other.gameObject.tag == "Save1")
+        if (other.gameObject.tag == "Save1")
         {
             hasReachedSavePoint = true;
-            //waar player daadwerkelijk begint als spel begint
+            //update speler positie wanneer savepoint is bereikt
             startLocation = GameObject.FindGameObjectWithTag("Save1").transform.position;
-            
         }
         if (other.gameObject.tag == "FinishLocationLvl1")
         {
-            
-            SceneManager.LoadScene("Level2");              
+
+            SceneManager.LoadScene("Level2");
         }
         if (other.gameObject.tag == "FinishLocationLvl2")
         {
-            
+
             SceneManager.LoadScene("Level3");
         }
-        if(other.gameObject.tag == "FinishLocationLvl3")
+        if (other.gameObject.tag == "FinishLocationLvl3")
         {
             SceneManager.LoadScene("endMenu");
         }
@@ -206,15 +216,15 @@ public class PlayerScript : MonoBehaviour
 
     void RespawnAtSavePoint()
     {
-        body.position = startLocation; //teleport to savepoint
+        body.position = startLocation; //update player current position and store it in startLocation field
         enemyHit = false; //reset enemyhit status
     }
 
     void RespawnAtStart()
-    { 
+    {
         body.position = startLocation;
         enemyHit = false;
-        hasReachedSavePoint= false;
+        hasReachedSavePoint = false;
     }
 }
 
