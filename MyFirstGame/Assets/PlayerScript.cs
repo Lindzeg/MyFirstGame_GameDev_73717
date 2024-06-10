@@ -20,7 +20,7 @@ public class PlayerScript : MonoBehaviour
     #region fields
     //serialize zodat je de waarde in unity kan veranderen
     //kan niet door scripts worden aangespast
-    [SerializeField] private float runSpeed = 10f;
+    [SerializeField] private float runSpeed = 8f;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Animator animator;
@@ -35,6 +35,8 @@ public class PlayerScript : MonoBehaviour
     private float slideDuration = 0.8f;
     //timer to manage slide duration
     private float slideTimer = 0f;
+    //to track if player is falling
+    private float fallPosition = -20f;
 
 
     //Vector 2 voor x en y input (vector3 is xyz)
@@ -52,6 +54,8 @@ public class PlayerScript : MonoBehaviour
     bool hasReachedSavePoint = false;
     //to track if player is sliding
     bool isSliding = false;
+    //to track if player is falling
+    bool isFalling = false;
 
     //audio
     private AudioSource audioSource;
@@ -157,6 +161,9 @@ public class PlayerScript : MonoBehaviour
             }
         }
 
+        CheckIfFalling();
+        HandleFalling();       
+
     }
 
     void OnMove(InputValue value)
@@ -218,6 +225,7 @@ public class PlayerScript : MonoBehaviour
     {
         body.position = startLocation; //update player current position and store it in startLocation field
         enemyHit = false; //reset enemyhit status
+        isFalling = false;
     }
 
     void RespawnAtStart()
@@ -225,6 +233,33 @@ public class PlayerScript : MonoBehaviour
         body.position = startLocation;
         enemyHit = false;
         hasReachedSavePoint = false;
+        isFalling = false;
+    }
+
+    void CheckIfFalling()
+    {
+        if(transform.position.y < fallPosition) 
+        {
+            isFalling = true;
+        } else
+        {
+            isFalling = false;
+        }
+
+    }
+
+    void HandleFalling()
+    {
+        if(isFalling)
+        {
+            if (!hasReachedSavePoint)
+            {
+                RespawnAtStart();
+            } else 
+            {
+                RespawnAtSavePoint();
+            }
+        }
     }
 }
 
